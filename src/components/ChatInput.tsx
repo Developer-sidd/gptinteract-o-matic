@@ -3,6 +3,7 @@ import React, { useState, KeyboardEvent, useRef } from 'react';
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Send, Paperclip } from "lucide-react";
+import { motion } from "framer-motion";
 
 interface ChatInputProps {
   onSendMessage: (message: string, file?: File) => void;
@@ -40,10 +41,19 @@ const ChatInput: React.FC<ChatInputProps> = ({ onSendMessage, isLoading }) => {
   };
 
   return (
-    <div className="p-4 border-t bg-background sticky bottom-0 shadow-md">
+    <motion.div 
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3 }}
+      className="p-4 border-t bg-background sticky bottom-0 shadow-md"
+    >
       <div className="max-w-3xl mx-auto">
         {selectedFile && (
-          <div className="flex items-center mb-2 p-2 bg-slate-100 rounded-md">
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="flex items-center mb-2 p-2 bg-slate-100 rounded-md"
+          >
             <span className="text-sm truncate max-w-[90%]">{selectedFile.name}</span>
             <Button
               variant="ghost"
@@ -53,7 +63,7 @@ const ChatInput: React.FC<ChatInputProps> = ({ onSendMessage, isLoading }) => {
             >
               ✕
             </Button>
-          </div>
+          </motion.div>
         )}
         <div className="flex gap-2">
           <Button
@@ -71,6 +81,7 @@ const ChatInput: React.FC<ChatInputProps> = ({ onSendMessage, isLoading }) => {
             ref={fileInputRef}
             onChange={handleFileChange}
             className="hidden"
+            accept="image/*,.pdf,.doc,.docx,.xls,.xlsx,.txt"
           />
           <Textarea
             value={inputValue}
@@ -90,7 +101,7 @@ const ChatInput: React.FC<ChatInputProps> = ({ onSendMessage, isLoading }) => {
           </Button>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 
