@@ -38,7 +38,7 @@ const ContentRenderer: React.FC<ContentRendererProps> = ({ content, type }) => {
               <TableHeader>
                 <TableRow>
                   {tableData.headers.map((header: string, index: number) => (
-                    <TableHead key={index} className="text-[#1EAEDB]">{header}</TableHead>
+                    <TableHead key={index} className="text-[#1A1F71] font-semibold">{header}</TableHead>
                   ))}
                 </TableRow>
               </TableHeader>

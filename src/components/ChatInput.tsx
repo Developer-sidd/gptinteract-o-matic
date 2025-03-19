@@ -41,7 +41,7 @@ const ChatInput: React.FC<ChatInputProps> = ({ onSendMessage, isLoading }) => {
           onClick={handleSubmit} 
           disabled={!inputValue.trim() || isLoading} 
           size="icon"
-          className="bg-[#1EAEDB] hover:bg-[#0FA0CE]"
+          className="bg-[#1A1F71] hover:bg-[#1A1F71]/90"
         >
           <Send size={18} />
         </Button>

@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { Button } from "@/components/ui/button";
@@ -7,6 +6,7 @@ import ChatMessage, { MessageType, ContentType } from './ChatMessage';
 import ChatInput from './ChatInput';
 import TypingIndicator from './TypingIndicator';
 import { useToast } from "@/components/ui/use-toast";
+import MastercardLogo from './MastercardLogo';
 
 const ChatInterface: React.FC = () => {
   const [messages, setMessages] = useState<MessageType[]>([]);
@@ -106,16 +106,15 @@ const ChatInterface: React.FC = () => {
       <header className="bg-background p-4 border-b sticky top-0 z-10">
         <div className="max-w-3xl mx-auto flex justify-between items-center">
           <div className="flex items-center">
-            <div className="w-10 h-10 bg-[#1EAEDB] rounded-full flex items-center justify-center mr-3">
-              <span className="text-white font-bold text-lg">M</span>
-            </div>
-            <h1 className="text-xl font-bold text-[#1EAEDB]">Mastercard Assistant</h1>
+            <MastercardLogo className="mr-3" />
+            <h1 className="text-xl font-bold text-[#1A1F71]">Mastercard Assistant</h1>
           </div>
           <Button 
             variant="outline" 
             size="sm" 
             onClick={handleClearChat}
             disabled={messages.length === 0 || isLoading}
+            className="border-[#1A1F71] text-[#1A1F71] hover:bg-[#1A1F71]/10"
           >
             <Trash2 className="h-4 w-4 mr-2" />
             Clear Chat
@@ -127,10 +126,8 @@ const ChatInterface: React.FC = () => {
         <div className="max-w-3xl mx-auto">
           {messages.length === 0 ? (
             <div className="flex flex-col items-center justify-center h-full p-8 text-center">
-              <div className="w-20 h-20 bg-[#1EAEDB] rounded-full flex items-center justify-center mb-4">
-                <span className="text-white font-bold text-3xl">M</span>
-              </div>
-              <h2 className="text-2xl font-bold mb-2 text-[#1EAEDB]">Welcome to Mastercard Assistant</h2>
+              <MastercardLogo className="mb-4 scale-150" />
+              <h2 className="text-2xl font-bold mb-2 text-[#1A1F71]">Welcome to Mastercard Assistant</h2>
               <p className="text-muted-foreground mb-6">Ask me about Mastercard products, services, or request different types of content</p>
             </div>
           ) : (
