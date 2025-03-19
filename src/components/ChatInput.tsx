@@ -33,7 +33,7 @@ const ChatInput: React.FC<ChatInputProps> = ({ onSendMessage, isLoading }) => {
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
           onKeyDown={handleKeyDown}
-          placeholder="Type your message here..."
+          placeholder="Ask Mastercard Assistant..."
           className="resize-none min-h-[50px] max-h-[200px]"
           disabled={isLoading}
         />
@@ -41,7 +41,7 @@ const ChatInput: React.FC<ChatInputProps> = ({ onSendMessage, isLoading }) => {
           onClick={handleSubmit} 
           disabled={!inputValue.trim() || isLoading} 
           size="icon"
-          variant="default"
+          className="bg-[#1EAEDB] hover:bg-[#0FA0CE]"
         >
           <Send size={18} />
         </Button>

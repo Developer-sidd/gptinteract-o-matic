@@ -3,7 +3,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { Button } from "@/components/ui/button";
 import { Trash2 } from "lucide-react";
-import ChatMessage, { MessageType } from './ChatMessage';
+import ChatMessage, { MessageType, ContentType } from './ChatMessage';
 import ChatInput from './ChatInput';
 import TypingIndicator from './TypingIndicator';
 import { useToast } from "@/components/ui/use-toast";
@@ -26,7 +26,8 @@ const ChatInterface: React.FC = () => {
     const userMessage: MessageType = {
       id: uuidv4(),
       role: 'user',
-      content,
+      content: content,
+      contentType: 'text',
       timestamp: new Date(),
     };
 
@@ -50,11 +51,36 @@ const ChatInterface: React.FC = () => {
       // Simulate API response for now
       await new Promise(resolve => setTimeout(resolve, 1500));
       
+      // Example response with different content types based on user input
+      let responseContent: string = "";
+      let responseType: ContentType = "text";
+      
+      if (content.toLowerCase().includes("image") || content.toLowerCase().includes("picture")) {
+        responseContent = "https://picsum.photos/400/300";
+        responseType = "image";
+      } else if (content.toLowerCase().includes("table")) {
+        responseContent = JSON.stringify({
+          headers: ["Card Type", "Annual Fee", "Rewards Rate", "Welcome Bonus"],
+          rows: [
+            ["Mastercard World Elite", "$395", "5%", "60,000 points"],
+            ["Mastercard World", "$120", "3%", "30,000 points"],
+            ["Mastercard Platinum", "$0", "1%", "10,000 points"]
+          ]
+        });
+        responseType = "table";
+      } else if (content.toLowerCase().includes("html")) {
+        responseContent = "<div style='color: #1EAEDB; font-weight: bold;'>This is <em>formatted</em> HTML content from Mastercard Assistant</div>";
+        responseType = "html";
+      } else {
+        responseContent = `I'm the Mastercard Assistant. I can help you with information about Mastercard products, services, and more. I can display various content types including images, tables, and formatted text.\n\nTo see examples, try asking me about:\n• Mastercard products (with "table")\n• Show me an image\n• Show HTML content`;
+        responseType = "text";
+      }
+      
       const assistantMessage: MessageType = {
         id: uuidv4(),
         role: 'assistant',
-        // Replace with data.response from actual API
-        content: `I'm a simulated response to: "${content}"\n\nWhen connected to the Spring Boot backend, I'll provide real responses. Please implement the backend API at http://localhost:8080/api/chat to handle these requests.`,
+        content: responseContent,
+        contentType: responseType,
         timestamp: new Date(),
       };
       
@@ -79,7 +105,12 @@ const ChatInterface: React.FC = () => {
     <div className="flex flex-col h-screen">
       <header className="bg-background p-4 border-b sticky top-0 z-10">
         <div className="max-w-3xl mx-auto flex justify-between items-center">
-          <h1 className="text-xl font-bold">GPT Clone</h1>
+          <div className="flex items-center">
+            <div className="w-10 h-10 bg-[#1EAEDB] rounded-full flex items-center justify-center mr-3">
+              <span className="text-white font-bold text-lg">M</span>
+            </div>
+            <h1 className="text-xl font-bold text-[#1EAEDB]">Mastercard Assistant</h1>
+          </div>
           <Button 
             variant="outline" 
             size="sm" 
@@ -96,8 +127,11 @@ const ChatInterface: React.FC = () => {
         <div className="max-w-3xl mx-auto">
           {messages.length === 0 ? (
             <div className="flex flex-col items-center justify-center h-full p-8 text-center">
-              <h2 className="text-2xl font-bold mb-2">Welcome to GPT Clone</h2>
-              <p className="text-muted-foreground mb-6">Ask me anything to start a conversation</p>
+              <div className="w-20 h-20 bg-[#1EAEDB] rounded-full flex items-center justify-center mb-4">
+                <span className="text-white font-bold text-3xl">M</span>
+              </div>
+              <h2 className="text-2xl font-bold mb-2 text-[#1EAEDB]">Welcome to Mastercard Assistant</h2>
+              <p className="text-muted-foreground mb-6">Ask me about Mastercard products, services, or request different types of content</p>
             </div>
           ) : (
             <>
