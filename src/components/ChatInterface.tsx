@@ -7,6 +7,7 @@ import ChatInput from './ChatInput';
 import TypingIndicator from './TypingIndicator';
 import { useToast } from "@/components/ui/use-toast";
 import MastercardLogo from './MastercardLogo';
+import { sendMessage } from '@/services/apiService';
 
 const ChatInterface: React.FC = () => {
   const [messages, setMessages] = useState<MessageType[]>([]);
@@ -35,45 +36,26 @@ const ChatInterface: React.FC = () => {
     setIsLoading(true);
 
     try {
-      // TODO: Replace with actual backend API call
-      // This is where you would call your Spring Boot backend
-      // const response = await fetch('http://localhost:8080/api/chat', {
-      //   method: 'POST',
-      //   headers: {
-      //     'Content-Type': 'application/json',
-      //   },
-      //   body: JSON.stringify({ message: content }),
-      // });
+      // Call the Spring Boot backend API
+      const responseContent = await sendMessage(content);
       
-      // if (!response.ok) throw new Error('Failed to get response from server');
-      // const data = await response.json();
-      
-      // Simulate API response for now
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      
-      // Example response with different content types based on user input
-      let responseContent: string = "";
+      // Determine content type based on response
       let responseType: ContentType = "text";
       
-      if (content.toLowerCase().includes("image") || content.toLowerCase().includes("picture")) {
-        responseContent = "https://picsum.photos/400/300";
+      // Check if response is an image URL
+      if (responseContent.startsWith('http') && 
+          (responseContent.endsWith('.jpg') || 
+           responseContent.endsWith('.png') || 
+           responseContent.endsWith('.gif'))) {
         responseType = "image";
-      } else if (content.toLowerCase().includes("table")) {
-        responseContent = JSON.stringify({
-          headers: ["Card Type", "Annual Fee", "Rewards Rate", "Welcome Bonus"],
-          rows: [
-            ["Mastercard World Elite", "$395", "5%", "60,000 points"],
-            ["Mastercard World", "$120", "3%", "30,000 points"],
-            ["Mastercard Platinum", "$0", "1%", "10,000 points"]
-          ]
-        });
+      } 
+      // Check if response is a JSON table
+      else if (responseContent.startsWith('{') && responseContent.includes('"headers"')) {
         responseType = "table";
-      } else if (content.toLowerCase().includes("html")) {
-        responseContent = "<div style='color: #1EAEDB; font-weight: bold;'>This is <em>formatted</em> HTML content from Mastercard Assistant</div>";
+      } 
+      // Check if response is HTML
+      else if (responseContent.startsWith('<') && responseContent.includes('</')) {
         responseType = "html";
-      } else {
-        responseContent = `I'm the Mastercard Assistant. I can help you with information about Mastercard products, services, and more. I can display various content types including images, tables, and formatted text.\n\nTo see examples, try asking me about:\n• Mastercard products (with "table")\n• Show me an image\n• Show HTML content`;
-        responseType = "text";
       }
       
       const assistantMessage: MessageType = {
