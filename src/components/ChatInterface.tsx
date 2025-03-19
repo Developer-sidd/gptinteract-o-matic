@@ -1,3 +1,4 @@
+
 import React, { useState, useRef, useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { Button } from "@/components/ui/button";
@@ -7,7 +8,7 @@ import ChatInput from './ChatInput';
 import TypingIndicator from './TypingIndicator';
 import { useToast } from "@/components/ui/use-toast";
 import MastercardLogo from './MastercardLogo';
-import { sendMessage } from '@/services/apiService';
+import { sendMessage, sendMessageWithFile } from '@/services/apiService';
 
 const ChatInterface: React.FC = () => {
   const [messages, setMessages] = useState<MessageType[]>([]);
@@ -23,12 +24,25 @@ const ChatInterface: React.FC = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  const handleSendMessage = async (content: string) => {
+  const handleSendMessage = async (content: string, file?: File) => {
+    let userMessageContent = content;
+    let userContentType: ContentType = 'text';
+    
+    // If there's a file, create a file message
+    if (file) {
+      userContentType = getFileContentType(file);
+      if (userContentType === 'image') {
+        userMessageContent = URL.createObjectURL(file);
+      } else {
+        userMessageContent = file.name;
+      }
+    }
+
     const userMessage: MessageType = {
       id: uuidv4(),
       role: 'user',
-      content: content,
-      contentType: 'text',
+      content: userMessageContent,
+      contentType: userContentType,
       timestamp: new Date(),
     };
 
@@ -36,8 +50,10 @@ const ChatInterface: React.FC = () => {
     setIsLoading(true);
 
     try {
-      // Call the Spring Boot backend API
-      const responseContent = await sendMessage(content);
+      // Call the Spring Boot backend API with or without file
+      const responseContent = file 
+        ? await sendMessageWithFile(content, file)
+        : await sendMessage(content);
       
       // Determine content type based on response
       let responseType: ContentType = "text";
@@ -77,6 +93,13 @@ const ChatInterface: React.FC = () => {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const getFileContentType = (file: File): ContentType => {
+    if (file.type.startsWith('image/')) {
+      return 'image';
+    }
+    return 'text';
   };
 
   const handleClearChat = () => {
