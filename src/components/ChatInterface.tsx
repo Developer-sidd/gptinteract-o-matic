@@ -129,7 +129,7 @@ const ChatInterface: React.FC = () => {
       transition={{ duration: 0.5 }}
       className="flex flex-col h-screen relative bg-gradient-to-b from-background to-white/80"
     >
-      {/* Add Wipro watermark */}
+      {/* Enhanced Wipro watermark */}
       <WiproWatermark />
       
       <header className="bg-background/80 backdrop-blur-sm p-4 border-b sticky top-0 z-10">
