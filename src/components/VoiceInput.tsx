@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useCallback } from 'react';
+
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { motion, AnimatePresence, Variants } from 'framer-motion';
 import { Mic, MicOff } from 'lucide-react';
 import { Button } from "@/components/ui/button";
@@ -16,6 +17,10 @@ const VoiceInput: React.FC<VoiceInputProps> = ({
 }) => {
   const [transcript, setTranscript] = useState<string>('');
   const [recognition, setRecognition] = useState<SpeechRecognition | null>(null);
+  const timeoutRef = useRef<number | null>(null);
+  
+  // Longer duration for voice recording - 2 minutes (120000ms)
+  const LISTENING_TIMEOUT = 120000;
 
   useEffect(() => {
     if ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window) {
@@ -37,12 +42,25 @@ const VoiceInput: React.FC<VoiceInputProps> = ({
         if (currentTranscript) {
           setTranscript(currentTranscript);
           onTranscript(currentTranscript);
+          
+          // Reset the timeout on new speech detected
+          if (timeoutRef.current) {
+            window.clearTimeout(timeoutRef.current);
+          }
+          timeoutRef.current = window.setTimeout(() => {
+            if (isListening) {
+              // Auto-stop after the extended timeout
+              toggleListening();
+            }
+          }, LISTENING_TIMEOUT);
         }
       };
 
       recognitionInstance.onerror = (event) => {
         console.error('Speech recognition error', event.error);
-        setIsListening(false);
+        if (event.error !== 'no-speech') {
+          setIsListening(false);
+        }
       };
 
       recognitionInstance.onend = () => {
@@ -56,6 +74,9 @@ const VoiceInput: React.FC<VoiceInputProps> = ({
       if (recognition) {
         recognition.stop();
       }
+      if (timeoutRef.current) {
+        window.clearTimeout(timeoutRef.current);
+      }
     };
   }, [onTranscript, setIsListening]);
 
@@ -65,10 +86,22 @@ const VoiceInput: React.FC<VoiceInputProps> = ({
     if (isListening) {
       recognition.stop();
       setIsListening(false);
+      if (timeoutRef.current) {
+        window.clearTimeout(timeoutRef.current);
+        timeoutRef.current = null;
+      }
     } else {
       setTranscript('');
       recognition.start();
       setIsListening(true);
+      
+      // Set timeout to automatically stop listening after the extended period
+      timeoutRef.current = window.setTimeout(() => {
+        if (recognition) {
+          recognition.stop();
+          setIsListening(false);
+        }
+      }, LISTENING_TIMEOUT);
     }
   }, [isListening, recognition, setIsListening]);
 
