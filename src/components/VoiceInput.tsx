@@ -1,6 +1,5 @@
-
 import React, { useState, useEffect, useCallback } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, Variants } from 'framer-motion';
 import { Mic, MicOff } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 
@@ -18,7 +17,6 @@ const VoiceInput: React.FC<VoiceInputProps> = ({
   const [transcript, setTranscript] = useState<string>('');
   const [recognition, setRecognition] = useState<SpeechRecognition | null>(null);
 
-  // Initialize speech recognition
   useEffect(() => {
     if ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window) {
       const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -74,14 +72,14 @@ const VoiceInput: React.FC<VoiceInputProps> = ({
     }
   }, [isListening, recognition, setIsListening]);
 
-  // Voice animation variants
-  const pulseVariants = {
+  const pulseVariants: Variants = {
     active: {
       scale: [1, 1.1, 1],
       opacity: [0.7, 1, 0.7],
       transition: {
         duration: 1.5,
         repeat: Infinity,
+        repeatType: "loop",
         ease: "easeInOut"
       }
     },
@@ -115,11 +113,10 @@ const VoiceInput: React.FC<VoiceInputProps> = ({
           {isListening ? (
             <motion.div
               key="listening"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              variants={pulseVariants}
+              initial="inactive"
               animate="active"
+              exit="inactive"
+              variants={pulseVariants}
             >
               <Mic size={18} />
             </motion.div>

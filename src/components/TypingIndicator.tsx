@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { motion } from 'framer-motion';
+import { motion, Variants } from 'framer-motion';
 
 const TypingIndicator: React.FC = () => {
   // Dot animation variants
@@ -9,9 +9,12 @@ const TypingIndicator: React.FC = () => {
     animate: { y: [0, -5, 0] }
   };
 
-  // Wave animation variant
-  const waveVariants = {
-    initial: { pathLength: 0, opacity: 0 },
+  // Wave animation variant - corrected to match Variants type
+  const waveVariants: Variants = {
+    initial: { 
+      pathLength: 0, 
+      opacity: 0 
+    },
     animate: { 
       pathLength: 1, 
       opacity: 1,
