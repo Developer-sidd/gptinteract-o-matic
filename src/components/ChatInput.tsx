@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Send, Paperclip } from "lucide-react";
 import { motion } from "framer-motion";
+import VoiceInput from './VoiceInput';
 
 interface ChatInputProps {
   onSendMessage: (message: string, file?: File) => void;
@@ -13,6 +14,7 @@ interface ChatInputProps {
 const ChatInput: React.FC<ChatInputProps> = ({ onSendMessage, isLoading }) => {
   const [inputValue, setInputValue] = useState<string>('');
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [isListening, setIsListening] = useState<boolean>(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleSubmit = () => {
@@ -20,6 +22,11 @@ const ChatInput: React.FC<ChatInputProps> = ({ onSendMessage, isLoading }) => {
       onSendMessage(inputValue, selectedFile || undefined);
       setInputValue('');
       setSelectedFile(null);
+      
+      // If we're listening, stop
+      if (isListening) {
+        setIsListening(false);
+      }
     }
   };
 
@@ -40,12 +47,16 @@ const ChatInput: React.FC<ChatInputProps> = ({ onSendMessage, isLoading }) => {
     fileInputRef.current?.click();
   };
 
+  const handleVoiceTranscript = (text: string) => {
+    setInputValue((prev) => (prev ? `${prev} ${text}` : text));
+  };
+
   return (
     <motion.div 
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}
-      className="p-4 border-t bg-background sticky bottom-0 shadow-md"
+      className="p-4 border-t bg-background sticky bottom-0 shadow-md backdrop-blur-sm z-10"
     >
       <div className="max-w-3xl mx-auto">
         {selectedFile && (
@@ -83,14 +94,22 @@ const ChatInput: React.FC<ChatInputProps> = ({ onSendMessage, isLoading }) => {
             className="hidden"
             accept="image/*,.pdf,.doc,.docx,.xls,.xlsx,.txt"
           />
+          
           <Textarea
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
             onKeyDown={handleKeyDown}
-            placeholder="Ask Mastercard Assistant..."
-            className="resize-none min-h-[50px] max-h-[200px]"
+            placeholder={isListening ? "Listening..." : "Ask Mastercard Assistant..."}
+            className="resize-none min-h-[50px] max-h-[200px] flex-1"
             disabled={isLoading}
           />
+          
+          <VoiceInput 
+            onTranscript={handleVoiceTranscript} 
+            isListening={isListening}
+            setIsListening={setIsListening}
+          />
+          
           <Button 
             onClick={handleSubmit} 
             disabled={(!inputValue.trim() && !selectedFile) || isLoading} 
