@@ -1,69 +1,154 @@
-# Welcome to your Lovable project
 
-## Project info
+# Mastercard Assistant
 
-**URL**: https://lovable.dev/projects/58858ca7-e867-44fc-8c78-96fde077a96c
+A modern, responsive conversational AI assistant that provides financial information and guidance. Built with React, TypeScript, and Shadcn UI components.
 
-## How can I edit this code?
+![Mastercard Assistant](public/og-image.png)
 
-There are several ways of editing your application.
+## Live Demo
 
-**Use Lovable**
+Visit [Mastercard Assistant](https://lovable.dev/projects/58858ca7-e867-44fc-8c78-96fde077a96c) to see the application in action.
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/58858ca7-e867-44fc-8c78-96fde077a96c) and start prompting.
+## Features
 
-Changes made via Lovable will be committed automatically to this repo.
+### 1. Conversational Interface
+- **Natural Language Processing**: Engage with the assistant using everyday language
+- **Context-Aware Responses**: The assistant can maintain context throughout a conversation
+- **Animated Message Transitions**: Smooth animations for a polished user experience
 
-**Use your preferred IDE**
+### 2. Multi-Modal Input Options
+- **Text Input**: Type questions or requests directly
+- **Voice Recognition**: Speak queries with extended recording time (up to 2 minutes)
+- **File Upload**: Attach documents, images, and other files for analysis
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+### 3. Rich Output Formats
+- **Text Responses**: Clean, formatted text replies
+- **Image Support**: Visual responses when appropriate
+- **HTML Content**: Structured content with formatted output
+- **Table Data**: Structured data displayed in an accessible table format
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+### 4. Mastercard Brand Integration
+- **Brand Colors**: Uses official Mastercard color palette (#EB001B and #1A1F71)
+- **Official Logos**: Features the Mastercard logo in the header
+- **Wipro Watermark**: Subtle Wipro branding as a watermark
 
-Follow these steps:
+### 5. Responsive Design
+- **Mobile-First Approach**: Works seamlessly on devices of all sizes
+- **Adaptive Layouts**: UI components adjust based on screen dimensions
+- **Touch-Friendly**: Easy to use on touchscreen devices
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+## Technical Details
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+### Core Technologies
+- **React**: Frontend library for building the user interface
+- **TypeScript**: Type-safe JavaScript for improved developer experience
+- **Vite**: Modern frontend build tool for fast development and optimized production builds
 
-# Step 3: Install the necessary dependencies.
-npm i
+### UI Framework and Components
+- **Tailwind CSS**: Utility-first CSS framework for styling
+- **Shadcn UI**: High-quality UI components built with Radix UI and Tailwind CSS
+- **Framer Motion**: Animation library for smooth, interactive transitions
+- **Lucide Icons**: Consistent, customizable icon system
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+### State Management and APIs
+- **React Hooks**: Custom hooks for state management and business logic
+- **Tanstack Query**: Data fetching and caching library
+- **API Integration**: RESTful API communication with Spring Boot backend
+- **Web Speech API**: Browser-based speech recognition for voice input
+
+### Features in Detail
+
+#### Voice Recognition System
+The application uses the Web Speech API for voice input, with these key features:
+- Continuous recognition mode for natural conversation
+- Extended listening time of 2 minutes
+- Auto-stop when speech is not detected after a set period
+- Visual feedback during recording with animations
+- Real-time transcription of speech to text
+
+#### Message Handling System
+Messages are processed through a sophisticated pipeline:
+- Unique identifiers for each message
+- Role-based styling (user vs assistant)
+- Support for various content types (text, images, HTML, tables)
+- Timestamp tracking for all interactions
+- Custom rendering based on content type
+
+#### Mock Backend Integration
+For development and demo purposes, the application includes:
+- Mock response generation when backend is unavailable
+- Simulated processing delays for realistic UX
+- Consistent API interface matching the production backend
+- File handling capabilities for document processing
+
+## Getting Started
+
+### Prerequisites
+- Node.js (v16+)
+- npm or yarn
+
+### Installation
+
+```bash
+# Clone the repository
+git clone <repository-url>
+
+# Navigate to project directory
+cd mastercard-assistant
+
+# Install dependencies
+npm install
+
+# Start development server
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+### Building for Production
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+```bash
+# Create optimized production build
+npm run build
 
-**Use GitHub Codespaces**
+# Preview production build locally
+npm run preview
+```
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+## Project Structure
 
-## What technologies are used for this project?
+```
+mastercard-assistant/
+├── public/                 # Static assets
+├── src/
+│   ├── components/         # React components
+│   │   ├── ui/             # Shadcn UI components
+│   │   ├── ChatInterface.tsx   # Main chat interface
+│   │   ├── ChatInput.tsx       # Text and voice input
+│   │   ├── VoiceInput.tsx      # Speech recognition
+│   │   └── ...                 # Other components
+│   ├── hooks/              # Custom React hooks
+│   ├── services/           # API and external services
+│   ├── pages/              # Route-based page components
+│   ├── lib/                # Utility functions
+│   ├── types/              # TypeScript type definitions
+│   └── App.tsx             # Application root
+├── tailwind.config.ts      # Tailwind CSS configuration
+└── vite.config.ts          # Vite configuration
+```
 
-This project is built with .
+## Demo Notes
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+When demoing the application, highlight these key features:
 
-## How can I deploy this project?
+1. **Initial Experience**: Show the welcome screen and explain the assistant's capabilities
+2. **Text Input**: Demonstrate asking financial questions via text
+3. **Voice Input**: Showcase the voice recognition by asking a question verbally
+4. **File Upload**: Upload a sample document and show how the assistant processes it
+5. **Response Types**: Show different response formats (text, tables, etc.)
+6. **Mobile Responsiveness**: Demonstrate how the UI adapts to different screen sizes
+7. **Branding Integration**: Point out the Mastercard and Wipro branding elements
 
-Simply open [Lovable](https://lovable.dev/projects/58858ca7-e867-44fc-8c78-96fde077a96c) and click on Share -> Publish.
+## Acknowledgments
 
-## I want to use a custom domain - is that possible?
-
-We don't support custom domains (yet). If you want to deploy your project under your own domain then we recommend using Netlify. Visit our docs for more details: [Custom domains](https://docs.lovable.dev/tips-tricks/custom-domain/)
+- Built with [Lovable](https://lovable.dev)
+- Powered by TypeScript, React, and Shadcn UI
+- Designed for Mastercard with Wipro's expertise
